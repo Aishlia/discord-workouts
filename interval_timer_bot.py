@@ -3,6 +3,8 @@ load_dotenv()
 
 import os
 import asyncio
+import datetime
+import time
 import discord
 from discord.ext import commands
 
@@ -88,6 +90,26 @@ async def leave_voice(context: commands.Context):
     voice_announcer.detach(timer)
     voice_announcer = None
     await context.voice_client.disconnect()
+
+
+@bot.command(name='reminder', help='Reminds users that it is workout time!')
+async def reminder(context: commands.Context):
+    await context.send('Reminder active')
+    # first_ping = False
+    # second_ping = False
+    # workout_time = False
+
+    while True:
+        if datetime.datetime.now().hour == 22 and datetime.datetime.now().minute == 30:
+            await context.send('@everyone 30 minutes to workout time')
+            time.sleep(60*14)
+        if datetime.datetime.now().hour == 22 and datetime.datetime.now().minute == 45:
+            await context.send('@everyone 15 minutes to workout time')
+            time.sleep(60*14)
+        if datetime.datetime.now().hour == 23 and datetime.datetime.now().minute == 00:
+            await context.send('@everyone WORKOUT TIME!!!!!')
+        time.sleep(30)
+
 
 
 bot.run(os.getenv('BOT_TOKEN'))

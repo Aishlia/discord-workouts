@@ -23,7 +23,9 @@ class IntervalTimer:
 
     def print_config(self):
         # TODO: Make the next line shorter
-        return f'{self._sets} sets of {self._exercises} exercises with {self._set_rest} seconds rest in between. {self._workout_time} seconds workout, {self._workout_rest} seconds rest'
+        return f'{self._sets} sets of {self._exercises} exercises with '
+        '{self._set_rest} seconds rest in between. {self._workout_time} '
+        'seconds workout, {self._workout_rest} seconds rest'
 
     def start(self, exercises: int, sets: int, workout_time: int, workout_rest: int, set_rest: int):
         self._exercises = exercises
