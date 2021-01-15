@@ -15,6 +15,7 @@ class IntervalTimer:
         self._workout_time = 30
         self._workout_rest = 10
         self._set_rest = 20
+        self._halfway_sound = False
 
         self._task = None
 
@@ -23,17 +24,15 @@ class IntervalTimer:
 
     def print_config(self):
         # TODO: Make the next line shorter
-        return f'{self._sets} sets of {self._exercises} exercises with '
-            f'{self._set_rest} seconds rest in between. {self._workout_time} '
-            f'seconds workout, {self._workout_rest} seconds rest'
+        return f'{self._sets} sets of {self._exercises} exercises with {self._set_rest} seconds rest in between. {self._workout_time} seconds workout, {self._workout_rest} seconds rest'
 
-
-    def start(self, exercises: int, sets: int, workout_time: int, workout_rest: int, set_rest: int):
+    def start(self, exercises: int, sets: int, workout_time: int, workout_rest: int, set_rest: int, halfway_sound: bool):
         self._exercises = exercises
         self._sets = sets
         self._workout_time = workout_time
         self._workout_rest = workout_rest
         self._set_rest = set_rest
+        self._halfway_sound = halfway_sound
 
         self._task = asyncio.create_task(self._run_timer())
         self.started.invoke()
@@ -72,7 +71,7 @@ class IntervalTimer:
                     print(exercise_time)
                     await asyncio.sleep(1)
                     exercise_time += 1
-                    self.tick.invoke(phase=TimerPhase.Work, done=exercise_time, remaining=self._workout_time - exercise_time)
+                    self.tick.invoke(phase=TimerPhase.Work, done=exercise_time, remaining=self._workout_time - exercise_time, halfway_sound=self._halfway_sound)
 
                 exercises_done += 1
                 # No need to do the rest phase after the last interval.

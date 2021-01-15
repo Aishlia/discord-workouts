@@ -26,15 +26,17 @@ async def greeting(context):
     await context.send('Hello there!')
 
 
-@bot.command(name='start', help='Starts the timer with specified settings.')
-async def start_timer(context, exercises: int, sets: int, workout_time: int, workout_rest: int, set_rest: int):
+@bot.command(name='start', help='Starts the timer with specified settings. (exercises, sets, workout_time, workout_rest, set_rest, halway_sound: bool)')
+async def start_timer(context, exercises: int, sets: int, workout_time: int, workout_rest: int, set_rest: int, halfway_sound=False):
+    if halway_sound == True and workout_time <= 10:
+        await context.send('Halway timer is only allowed for workout times greater than 10 seconds. It has been disabled.')
     global timer
     # We can only run one timer at the same time.
     if timer.running():
         await context.send('Timer is already running, please stop it first.')
         return
 
-    timer.start(exercises, sets, workout_time, workout_rest, set_rest)
+    timer.start(exercises, sets, workout_time, workout_rest, set_rest, halfway_sound)
     await context.send(f'Beginning {timer.print_config()}. HAVE FUN!')
 
 @bot.command(name='restart', help='Restart the timer with previous settings.')
