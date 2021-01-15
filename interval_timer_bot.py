@@ -25,15 +25,15 @@ async def greeting(context):
 
 
 @bot.command(name='start', help='Starts the timer with specified settings.')
-async def start_timer(context, repetitions: int, work: int, rest: int):
+async def start_timer(context, exercises: int, sets: int, workout_time: int, workout_rest: int, set_rest: int):
     global timer
     # We can only run one timer at the same time.
     if timer.running():
         await context.send('Timer is already running, please stop it first.')
         return
-    
-    timer.start(repetitions, work, rest)
-    await context.send(f'Alright, {timer.print_config()}, comin\' right up!')
+
+    timer.start(exercises, sets, workout_time, workout_rest, set_rest)
+    await context.send(f'Beginning {timer.print_config()}. HAVE FUN!')
 
 @bot.command(name='restart', help='Restart the timer with previous settings.')
 async def restart_timer(context):
@@ -52,7 +52,7 @@ async def stop_timer(context):
     if not timer.running():
         await context.send('There is no timer running, so let\'s call this a success, shall we?')
         return
-    
+
     timer.stop()
     await context.send('Timer stopped.')
 
@@ -69,14 +69,14 @@ async def show_timer_config(context):
 async def join_voice(context: commands.Context):
     # Not sure how to do this nicely, in other languages I would use the null-conditional operator on voice
     voice_channel = context.author.voice.channel if context.author.voice is not None else None
-    
+
     if voice_channel is None:
         await context.send('Oh my, I do not know where to go.')
         await context.send('Please join a voice channel and I will follow you.')
         return
-    
+
     voice_client = await voice_channel.connect()
-    
+
     global voice_announcer, timer
     voice_announcer = VoiceAnnouncer(voice_client)
     voice_announcer.attach(timer)
