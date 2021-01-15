@@ -1,3 +1,5 @@
+## This is from https://github.com/muerek/discord-interval-timer-bot
+
 # Discord Interval Timer Bot
 
 This is a simple Python-based bot for Discord. It provides an interval timer with voice announcements designed to be used for HIIT workouts, for example. The timer will run for a specified number of intervals. Each interval has a work phase and a rest phase.
