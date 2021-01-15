@@ -21,7 +21,8 @@ class VoiceAnnouncer():
 
         # Play sound halfway through the work phase if it is 30 seconds or longer.
         print(halfway_sound)
-        if halfway_sound == True and done + remaining > 10:
+        if halfway_sound == True and done + remaining > 10:  # Check if it is long enough for halfway_sound to not interfere
+        # with Countdown
             # We get ticks for every full second.
             # If work is set for an uneven amount of seconds, we cannot hit the exact half.
             # Play sound half a second earlier then.
