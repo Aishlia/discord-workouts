@@ -24,8 +24,9 @@ class IntervalTimer:
     def print_config(self):
         # TODO: Make the next line shorter
         return f'{self._sets} sets of {self._exercises} exercises with '
-        '{self._set_rest} seconds rest in between. {self._workout_time} '
-        'seconds workout, {self._workout_rest} seconds rest'
+            f'{self._set_rest} seconds rest in between. {self._workout_time} '
+            f'seconds workout, {self._workout_rest} seconds rest'
+
 
     def start(self, exercises: int, sets: int, workout_time: int, workout_rest: int, set_rest: int):
         self._exercises = exercises
@@ -87,6 +88,7 @@ class IntervalTimer:
                     self.tick.invoke(phase=TimerPhase.Rest, done=exercise_rest_time, remaining=self._workout_rest - exercise_rest_time)
 
 
+            sets_done += 1
             if sets_done == self._sets:
                 break
 
