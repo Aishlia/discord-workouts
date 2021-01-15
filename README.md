@@ -1,4 +1,5 @@
 ## This is from https://github.com/muerek/discord-interval-timer-bot
+All credit to user muerek. I just wanted to add features for my own personal use. 
 
 # Discord Interval Timer Bot
 
