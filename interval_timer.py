@@ -1,7 +1,18 @@
 import asyncio
 import enum
+import logging
 
 from event import Event
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+
+class TimerPhase(enum.Enum):
+    Preparation = 1
+    Work = 2
+    Rest = 3
+
 
 class IntervalTimer:
     def __init__(self):
@@ -36,39 +47,40 @@ class IntervalTimer:
 
         self._task = asyncio.create_task(self._run_timer())
         self.started.invoke()
-        print('Timer started.')
+        logger.debug('Timer started.')
 
     def restart(self):
         self._task = asyncio.create_task(self._run_timer())
         self.started.invoke()
-        print('Timer started.')
+        logger.debug('Timer started.')
 
     def stop(self):
         self._task.cancel()
-        print('Timer stopped.')
+        logger.debug('Timer stopped.')
 
     async def _run_timer(self):
         # Start with a prep phase
-        prep = 17
+        prep = 17  # 15 second countdown with 2 second mp3
         prep_done = 0
         while prep_done < prep:
             await asyncio.sleep(1)
             prep_done += 1
             self.tick.invoke(phase=TimerPhase.Preparation, done=prep_done, remaining=prep - prep_done)
 
-        # Note that the limits are exclusive upper bounds since we count starting from 0.
-        exercises_done = 0
+        # Note that the limits are exclusive upper bounds since we count starting from 0
         sets_done = 0
-        print(f'set {self._exercises} {self._sets} {self._workout_time} {self._workout_rest} {self._set_rest}')  # DEBUG
+        logger.debug(f'set {self._exercises} {self._sets} {self._workout_time} {self._workout_rest} {self._set_rest}')  # DEBUG
         while sets_done < self._sets:
-            print(f'set {sets_done} starting')  #DEBUG
+            logger.debug(f'set {sets_done} starting')  #DEBUG
+            exercises_done = 0
             while exercises_done < self._exercises:
-                print(f'set {exercises_done} starting')  # DEBUG
+                logger.debug(f'set {exercises_done} starting')  # DEBUG
 
                 # Work phase.
                 exercise_time = 0
+
                 while exercise_time < self._workout_time:
-                    print(exercise_time)
+                    logger.debug(f"Starting exercise for {exercise_time} seconds")
                     await asyncio.sleep(1)
                     exercise_time += 1
                     self.tick.invoke(phase=TimerPhase.Work, done=exercise_time, remaining=self._workout_time - exercise_time, halfway_sound=self._halfway_sound)
@@ -76,7 +88,7 @@ class IntervalTimer:
                 exercises_done += 1
                 # No need to do the rest phase after the last interval.
                 if exercises_done == self._exercises:
-                    print("break")
+                    logger.debug("Break time!")
                     break
 
                 # Exercise rest phase.
@@ -101,11 +113,4 @@ class IntervalTimer:
         # Wait to not clash with the last tick event.
         await asyncio.sleep(1)
         self.ended.invoke()
-        print('Last interval completed.')
-
-
-
-class TimerPhase(enum.Enum):
-    Preparation = 1
-    Work = 2
-    Rest = 3
+        logger.debug('Last interval completed.')
