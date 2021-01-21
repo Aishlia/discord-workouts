@@ -8,7 +8,7 @@ from interval_timer import IntervalTimer, TimerPhase
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-OUR_DIR = os.path.abspath(os.path.basename(__file__))
+OUR_DIR = os.path.abspath(os.path.dirname(__file__))
 DEFAULT_SOUND_DIR = os.path.join(OUR_DIR, "sounds")
 
 class VoiceAnnouncer:
